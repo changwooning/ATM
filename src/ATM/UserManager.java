@@ -47,6 +47,13 @@ public class UserManager {
 			target.setPhone(phone);
 		}
 	}
+	
+	// D
+	public boolean deleteUser(User user) {
+		int code = user.getCode();
+		User target = getUserByUserCode(code);
+		return group.remove(target);
+	}
 
 	// 전화번호가 유효한지
 	private boolean isValidPhone(String phone) {
