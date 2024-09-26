@@ -30,7 +30,7 @@ public class Account {
 		return accountNumber;
 	}
 	
-	public boolean equalsPassword() {
+	public boolean equalsPassword(String password) {
 		return this.password.equals(password);
 	}
 	
