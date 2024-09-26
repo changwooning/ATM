@@ -51,6 +51,13 @@ public class AccountManager {
 		target.setBalance(balance);
 	}
 	
+	// D : 계좌 삭제
+	public void deleteAccount(Account account) {
+		String accountNumber = account.getAccountNumber();
+		Account target = getAccountByAccountNumber(accountNumber);
+		list.remove(target);
+	}
+	
 	// 코드가 유효한지
 	private boolean isValidUserCode(int userCode) {
 		return userCode != 0;
