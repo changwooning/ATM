@@ -18,6 +18,7 @@ public class UserManager {
 		if (isValidPhone(phone)) {
 			int code = generateUserCode();
 			User user = new User(code, name, phone);
+			group.add(user);
 			return user.clone();
 		}
 		return new User();
