@@ -44,6 +44,13 @@ public class AccountManager {
 		return new Account();
 	}
 	
+	// U : 계좌 잔액 업데이트
+	public void updateAccountBalance(Account account,int balance) {
+		String accountNumber = account.getAccountNumber();
+		Account target = getAccountByAccountNumber(accountNumber);
+		target.setBalance(balance);
+	}
+	
 	// 코드가 유효한지
 	private boolean isValidUserCode(int userCode) {
 		return userCode != 0;
@@ -56,6 +63,13 @@ public class AccountManager {
 		if(account.getAccountNumber() == null)
 			return true;
 		return false;
+	}
+	
+	private Account getAccountByAccountNumber(String accountNumber) {
+		for(Account account : list)
+			if(account.getAccountNumber().equals(accountNumber))
+				return account;	// 해당 계좌 반환
+		return new Account();
 	}
 	
 	// 계좌번호 생성
