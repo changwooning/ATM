@@ -1,5 +1,6 @@
 package ATM;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Bank {
@@ -79,9 +80,9 @@ public class Bank {
 		if(sel == USER_JOIN) {
 			joinUser();
 		}
-//		else if(sel == USER_LEAVE) {
-//			leaveUser();
-//		}
+		else if(sel == USER_LEAVE) {
+			leaveUser();
+		}
 //		else if(sel == DEPOSIT) {
 //			deposit();
 //		}
@@ -114,6 +115,41 @@ public class Bank {
 	private void welcomeMessage(User user) {
 		String message = user.getCode() != 0 ? String.format("%s 회원님 환영합니다.\n", user.getName()) : "회원가입실패";
 		System.out.println(message);
+	}
+	
+	private void leaveUser() {
+		String phone = inputString("phone (###-####-####)");
+		
+		User user = userManager.findUserByUserPhone(phone);
+		int userCode = user.getCode();
+		ArrayList<Account> accounts = accountManager.findAccountAllByUserCode(userCode);
+		
+		boolean result = false;
+		if(withdrawFullAccount(accounts)) 
+			result = userManager.deleteUser(user);
+		
+		String message = result ? "회원탈퇴완료" : "회원탈퇴실패";
+		System.out.println(message);
+	}
+	
+	// 모든 계좌를 철회하는 메서드
+	private boolean withdrawFullAccount(ArrayList<Account> accounts) {
+		if(checkAllAccountPassword(accounts)) {	// 모든 계좌의 비밀번호 확인
+			for(Account account : accounts)
+				accountManager.deleteAccount(account);
+			return true;
+		}
+		return false;
+	}
+	
+	// 비밀번호 확인
+	private boolean checkAllAccountPassword(ArrayList<Account> accounts) {
+		for(Account account : accounts) {
+			String password = inputString(account.getAccountNumber() + "비밀번호 확인 : ");
+			if(!account.equalsPassword(password))
+				return false;
+		}
+		return true;
 	}
 	
 	private void openAccount(User user) {
