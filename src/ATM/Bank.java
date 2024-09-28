@@ -68,17 +68,66 @@ public class Bank {
 		return number;
 	}
 	
+	private String inputString(String message) {
+		System.out.println(message);
+		return scan.next();
+	}
+	
 	
 	
 	private void runMenu(int sel) {
-		if(sel == USER_JOIN) {}
-		else if(sel == USER_LEAVE) {}
-		else if(sel == DEPOSIT) {}
-		else if(sel == TRANSFER) {}
-		else if(sel == ACCOUNT_OPEN) {}
-		else if(sel == ACCOUNT_WITHDRAW) {}
-		else if(sel == ACCOUNT_SEARCH) {}
-		else if(sel == EXIT) {}
+		if(sel == USER_JOIN) {
+			joinUser();
+		}
+//		else if(sel == USER_LEAVE) {
+//			leaveUser();
+//		}
+//		else if(sel == DEPOSIT) {
+//			deposit();
+//		}
+//		else if(sel == TRANSFER) {
+//			transfer();
+//		}
+//		else if(sel == ACCOUNT_OPEN) {
+//			openAccount();
+//		}
+//		else if(sel == ACCOUNT_WITHDRAW) {
+//			withdraw();
+//		}
+//		else if(sel == ACCOUNT_SEARCH) {
+//			searchAccount();
+//		}
+		else if(sel == EXIT) {
+			isRun = false;
+		}
+	}
+	
+	private void joinUser() {
+		String name = inputString("이름 : ");
+		String phone = inputString("phone (###-####-####)");
+		
+		User user = userManager.createUser(name, phone);
+		openAccount(user);
+		welcomeMessage(user);
+	}
+	
+	private void welcomeMessage(User user) {
+		String message = user.getCode() != 0 ? String.format("%s 회원님 환영합니다.\n", user.getName()) : "회원가입실패";
+		System.out.println(message);
+	}
+	
+	private void openAccount(User user) {
+		int userCode = user.getCode();
+		String password = inputString("계좌 비밀번호 : ");
+		
+		Account account = accountManager.createAccount(userCode, password);
+		if(isValidAccount(account)) {
+			System.out.println(account.getAccountNumber() + " 개설 완료");
+		}
+	}
+	
+	private boolean isValidAccount(Account account) {
+		return account.getAccountNumber() != null;
 	}
 	
 }
