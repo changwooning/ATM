@@ -89,9 +89,9 @@ public class Bank {
 		else if(sel == TRANSFER) {
 			transfer();
 		}
-//		else if(sel == ACCOUNT_OPEN) {
-//			openAccount();
-//		}
+		else if(sel == ACCOUNT_OPEN) {
+			openAccount();
+		}
 //		else if(sel == ACCOUNT_WITHDRAW) {
 //			withdraw();
 //		}
@@ -174,6 +174,11 @@ public class Bank {
 		}
 	}
 	
+	private void openAccount() {
+		User user = findUser();	// 사용자 찾고
+		openAccount(user);	// 계좌 개설
+	}
+	
 	// 모든 계좌를 철회하는 메서드
 	private boolean withdrawFullAccount(ArrayList<Account> accounts) {
 		if(checkAllAccountPassword(accounts)) {	// 모든 계좌의 비밀번호 확인
@@ -192,6 +197,12 @@ public class Bank {
 				return false;
 		}
 		return true;
+	}
+	
+	private User findUser() {
+		String phone = inputString("phone (###-####-####)");
+		User user = userManager.findUserByUserPhone(phone);	// 전화번호로 유저찾기
+		return user;
 	}
 	
 	// 특정 계좌찾기
