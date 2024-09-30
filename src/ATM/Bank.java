@@ -83,9 +83,9 @@ public class Bank {
 		else if(sel == USER_LEAVE) {
 			leaveUser();
 		}
-//		else if(sel == DEPOSIT) {
-//			deposit();
-//		}
+		else if(sel == DEPOSIT) {
+			deposit();
+		}
 //		else if(sel == TRANSFER) {
 //			transfer();
 //		}
@@ -132,6 +132,24 @@ public class Bank {
 		System.out.println(message);
 	}
 	
+	private void deposit() {
+		Account account = findAccount();	// 계좌를 찾고
+		
+		if(isValidAccount(account)) {
+			int money = inputNumber("입금 금액 : ");
+			int balance = account.getBalance();
+			
+			if(money > 0) {
+				accountManager.updateAccountBalance(account, balance+money);
+				System.out.println("입금완료");
+			}else
+				System.out.println("입금실패");
+		}else {
+			System.out.println("유효하지않은 계좌입니다.");
+			return;
+		}
+	}
+	
 	// 모든 계좌를 철회하는 메서드
 	private boolean withdrawFullAccount(ArrayList<Account> accounts) {
 		if(checkAllAccountPassword(accounts)) {	// 모든 계좌의 비밀번호 확인
@@ -150,6 +168,12 @@ public class Bank {
 				return false;
 		}
 		return true;
+	}
+	
+	private Account findAccount() {
+		String accountNumber = inputString("계좌번호 (####-####-####)");
+		Account account = accountManager.findAccountByAccountNumber(accountNumber);
+		return account;
 	}
 	
 	private void openAccount(User user) {
