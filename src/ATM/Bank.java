@@ -92,9 +92,9 @@ public class Bank {
 		else if(sel == ACCOUNT_OPEN) {
 			openAccount();
 		}
-//		else if(sel == ACCOUNT_WITHDRAW) {
-//			withdraw();
-//		}
+		else if(sel == ACCOUNT_WITHDRAW) {
+			withdraw();
+		}
 //		else if(sel == ACCOUNT_SEARCH) {
 //			searchAccount();
 //		}
@@ -177,6 +177,17 @@ public class Bank {
 	private void openAccount() {
 		User user = findUser();	// 사용자 찾고
 		openAccount(user);	// 계좌 개설
+	}
+	
+	private void withdraw() {
+		Account account = findAccount();
+		String password = inputString("계좌 비밀번호 : ");
+		
+		if(account.equalsPassword(password)) {
+			accountManager.deleteAccount(account);
+			System.out.println("계좌철회완료");
+		}else
+			System.out.println("계좌철회실패");
 	}
 	
 	// 모든 계좌를 철회하는 메서드
