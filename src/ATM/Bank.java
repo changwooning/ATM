@@ -1,5 +1,6 @@
 package ATM;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,6 +19,7 @@ public class Bank {
 	private boolean isRun;
 	
 	private Scanner scan = new Scanner(System.in);
+	private DecimalFormat dcf = new DecimalFormat();
 	
 	private UserManager userManager = new UserManager();
 	private AccountManager accountManager = new AccountManager();
@@ -95,9 +97,9 @@ public class Bank {
 		else if(sel == ACCOUNT_WITHDRAW) {
 			withdraw();
 		}
-//		else if(sel == ACCOUNT_SEARCH) {
-//			searchAccount();
-//		}
+		else if(sel == ACCOUNT_SEARCH) {
+			searchAccount();
+		}
 		else if(sel == EXIT) {
 			isRun = false;
 		}
@@ -188,6 +190,24 @@ public class Bank {
 			System.out.println("계좌철회완료");
 		}else
 			System.out.println("계좌철회실패");
+	}
+	
+	private void searchAccount() {
+		Account account = findAccount();
+		String password = inputString("계좌 비밀번호 : ");
+		
+		if(account.equalsPassword(password)) {
+			System.out.println(toStringMoney(account.getBalance()) + "조회완료");
+		}else {
+			System.out.println("비밀번호가 불일치 합니다.");
+			return;
+		}
+	}
+	
+	// 금액을 형식에 맞게 문자열로 변환함
+	private String toStringMoney(int money) {
+		String message = dcf.format(money) + "원";
+		return message;
 	}
 	
 	// 모든 계좌를 철회하는 메서드
