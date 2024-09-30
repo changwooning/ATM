@@ -86,9 +86,9 @@ public class Bank {
 		else if(sel == DEPOSIT) {
 			deposit();
 		}
-//		else if(sel == TRANSFER) {
-//			transfer();
-//		}
+		else if(sel == TRANSFER) {
+			transfer();
+		}
 //		else if(sel == ACCOUNT_OPEN) {
 //			openAccount();
 //		}
@@ -135,7 +135,7 @@ public class Bank {
 	private void deposit() {
 		Account account = findAccount();	// 계좌를 찾고
 		
-		if(isValidAccount(account)) {
+		if(isValidAccount(account)) {	// 유효하면
 			int money = inputNumber("입금 금액 : ");
 			int balance = account.getBalance();
 			
@@ -146,6 +146,30 @@ public class Bank {
 				System.out.println("입금실패");
 		}else {
 			System.out.println("유효하지않은 계좌입니다.");
+			return;
+		}
+	}
+	
+	private void transfer() {
+		Account myAccount = findAccount("본인 계좌 : ");
+		String password = inputString("비밀번호 : ");
+		
+		Account whoAccount = findAccount("상대 계좌 : ");
+		int money = inputNumber("이체 금액 : ");
+		
+		Account[] accounts = new Account[] {myAccount,whoAccount};
+		
+		if(isValidAccount(accounts) && myAccount.equalsPassword(password)) {
+			int balance = myAccount.getBalance();
+			
+			if(money > 0 && balance - money >= 0) {
+				accountManager.updateAccountBalance(myAccount, balance - money);
+				accountManager.updateAccountBalance(whoAccount, whoAccount.getBalance() + money);
+				System.out.println("이체 완료");
+			}else
+				System.out.println("이체 실패");
+		}else {
+			System.out.println("비밀번호 또는 계좌번호가 유효하지 않습니다.");
 			return;
 		}
 	}
@@ -170,6 +194,13 @@ public class Bank {
 		return true;
 	}
 	
+	// 특정 계좌찾기
+	private Account findAccount(String message) {
+		String accountNumber = inputString(message + "계좌번호 (####-####-####)");
+		Account account = accountManager.findAccountByAccountNumber(accountNumber);
+		return account;
+	}
+	
 	private Account findAccount() {
 		String accountNumber = inputString("계좌번호 (####-####-####)");
 		Account account = accountManager.findAccountByAccountNumber(accountNumber);
@@ -184,6 +215,13 @@ public class Bank {
 		if(isValidAccount(account)) {
 			System.out.println(account.getAccountNumber() + " 개설 완료");
 		}
+	}
+	
+	private boolean isValidAccount(Account[] accounts) {
+		for(Account account : accounts)
+			if(account.getAccountNumber() == null)
+				return false;
+		return true;
 	}
 	
 	private boolean isValidAccount(Account account) {
