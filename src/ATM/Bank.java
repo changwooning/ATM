@@ -53,7 +53,7 @@ public class Bank {
 		int accountSize = accountManager.getAccountSize();
 		String status = String.format("User size : %d\nAccount Size : %d", userSize,accountSize);
 		
-		System.out.println("-----------");
+		System.out.println("===============");
 		System.out.println(status);
 		
 		printDataAll();
@@ -64,7 +64,7 @@ public class Bank {
 		int accountSize = accountManager.getAccountSize();
 		
 		if(accountSize > 0) {
-			System.out.println("----------");
+			System.out.println("===============");
 		}
 		
 		for(int i=0; i<accountSize; i++) {
@@ -85,7 +85,7 @@ public class Bank {
 	}
 	
 	private void printMenu() {
-		System.out.println("=== " + BRAND + " ===");
+		System.out.println("===== " + BRAND + " =====");
 		System.out.println("1.회원가입");
 		System.out.println("2.회원탈퇴");
 		System.out.println("3.입금");
@@ -99,7 +99,7 @@ public class Bank {
 	private int inputNumber(String message) {
 		int number = -1;
 		try {
-			System.out.println(message + " : ");
+			System.out.print(message + " : ");
 			String input = scan.next();
 			number = Integer.parseInt(input);
 		}catch(Exception e) {
@@ -109,7 +109,7 @@ public class Bank {
 	}
 	
 	private String inputString(String message) {
-		System.out.println(message + " : ");
+		System.out.print(message + " : ");
 		return scan.next();
 	}
 	
@@ -138,6 +138,7 @@ public class Bank {
 			searchAccount();
 		}
 		else if(sel == EXIT) {
+			System.out.println("시스템을 종료합니다.");
 			isRun = false;
 		}
 	}
@@ -184,10 +185,6 @@ public class Bank {
 			}else
 				System.out.println("입금실패");
 		}
-//		else {
-//			System.out.println("유효하지않은 계좌입니다.");
-//			return;
-//		}
 	}
 	
 	private void transfer() {
@@ -208,9 +205,6 @@ public class Bank {
 				System.out.println("이체 완료");
 			}else
 				System.out.println("이체 실패");
-		}else {
-			System.out.println("비밀번호 또는 계좌번호가 유효하지 않습니다.");
-			return;
 		}
 	}
 	
@@ -261,7 +255,7 @@ public class Bank {
 	// 비밀번호 확인
 	private boolean checkAllAccountPassword(ArrayList<Account> accounts) {
 		for(Account account : accounts) {
-			String password = inputString(account.getAccountNumber() + "비밀번호 확인 : ");
+			String password = inputString(account.getAccountNumber() + "비밀번호 확인");
 			if(!account.equalsPassword(password))
 				return false;
 		}
