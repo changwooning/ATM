@@ -52,7 +52,10 @@ public class AccountManager {
 	public void updateAccountBalance(Account account,int balance) {
 		String accountNumber = account.getAccountNumber();
 		Account target = getAccountByAccountNumber(accountNumber);
-		target.setBalance(balance);
+		if(target.getAccountNumber() != null)
+			target.setBalance(balance);
+		else
+			System.out.println("잘못된 계좌 번호 입니다.");
 	}
 	
 	// D : 계좌 삭제
