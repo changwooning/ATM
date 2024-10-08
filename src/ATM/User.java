@@ -15,11 +15,11 @@ public class User {
 	}
 	
 	public int getCode() {
-		return code;
+		return this.code;
 	}
 	
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	public String getPhone() {

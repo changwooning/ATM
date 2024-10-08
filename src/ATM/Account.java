@@ -23,11 +23,11 @@ public class Account {
 	}
 	
 	public int getUserCode() {
-		return userCode;
+		return this.userCode;
 	}
 	
 	public String getAccountNumber() {
-		return accountNumber;
+		return this.accountNumber;
 	}
 	
 	public boolean equalsPassword(String password) {
@@ -35,7 +35,7 @@ public class Account {
 	}
 	
 	public int getBalance() {
-		return balance;
+		return this.balance;
 	}
 	
 	public void setBalance(int balance) {
@@ -43,7 +43,7 @@ public class Account {
 	}
 	
 	public Account clone() {
-		return new Account(userCode,accountNumber,password,balance);
+		return new Account(this.userCode,this.accountNumber,this.password,this.balance);
 	}
 
 }

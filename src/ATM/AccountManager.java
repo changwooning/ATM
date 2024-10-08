@@ -8,12 +8,11 @@ public class AccountManager {
 	private final int LIMIT = 3;
 	
 	private ArrayList<Account> list;
-	private Random ran;
+	private Random ran = new Random();
 	
 	
 	public AccountManager() {
-		list = new ArrayList<>();
-		ran = new Random();
+		this.list = new ArrayList<Account>();
 	}
 	
 	public Account createAccount(int userCode,String password) {
@@ -24,6 +23,11 @@ public class AccountManager {
 			return account.clone();
 		}
 		return new Account();
+	}
+	
+	// R 
+	public Account findAccountByIndex(int index) {
+		return this.list.get(index).clone();
 	}
 	
 	// R : 사용자 코드로 모든 계좌 찾기
@@ -40,7 +44,7 @@ public class AccountManager {
 	public Account findAccountByAccountNumber(String accountNumber) {
 		for(Account account : list)
 			if(account.getAccountNumber().equals(accountNumber))
-				return account;
+				return account.clone();
 		return new Account();
 	}
 	
@@ -56,6 +60,10 @@ public class AccountManager {
 		String accountNumber = account.getAccountNumber();
 		Account target = getAccountByAccountNumber(accountNumber);
 		list.remove(target);
+	}
+	
+	public int getAccountSize() {
+		return this.list.size();
 	}
 	
 	// 코드가 유효한지
@@ -87,7 +95,7 @@ public class AccountManager {
 			int body = ran.nextInt(9000) + 1000;
 			int tail = ran.nextInt(9000) + 1000;
 			
-			accountNumber = String.format("%d-%d-%d\n", head,body,tail);
+			accountNumber = String.format("%d-%d-%d", head,body,tail);
 			
 			if(isValidAccountNumber(accountNumber))
 				break;

@@ -24,6 +24,7 @@ public class Bank {
 	private UserManager userManager = new UserManager();
 	private AccountManager accountManager = new AccountManager();
 	
+	
 	public Bank(String BRAND) {
 		this.BRAND = BRAND;
 		this.isRun = true;
@@ -40,9 +41,46 @@ public class Bank {
 		// 계좌 조회
 		// 종료
 		while(isRun) {
+			printStatus();
 			printMenu();
 			int sel = inputNumber("");
 			runMenu(sel);
+		}
+	}
+	
+	private void printStatus() {
+		int userSize = userManager.getUserSize();
+		int accountSize = accountManager.getAccountSize();
+		String status = String.format("User size : %d\nAccount Size : %d", userSize,accountSize);
+		
+		System.out.println("-----------");
+		System.out.println(status);
+		
+		printDataAll();
+		printDataSummery();
+	}
+	
+	private void printDataAll() {
+		int accountSize = accountManager.getAccountSize();
+		
+		if(accountSize > 0) {
+			System.out.println("----------");
+		}
+		
+		for(int i=0; i<accountSize; i++) {
+			Account account = accountManager.findAccountByIndex(i);
+			String info = String.format("%d) %s : %s\n", account.getUserCode(),account.getAccountNumber(),toStringMoney(account.getBalance()));
+			System.out.println(info);
+		}
+	}
+	
+	private void printDataSummery() {
+		ArrayList<User> userList = userManager.findUserAll();
+		for(User user : userList) {
+			int userCode = user.getCode();
+			ArrayList<Account> accList = accountManager.findAccountAllByUserCode(userCode);
+			String message = String.format("%d %s는 계좌를 %d개 가지고 있다.\n", userCode,user.getName(),accList.size());
+			System.out.println(message);
 		}
 	}
 	
@@ -61,18 +99,17 @@ public class Bank {
 	private int inputNumber(String message) {
 		int number = -1;
 		try {
-			System.out.println(message);
+			System.out.println(message + " : ");
 			String input = scan.next();
 			number = Integer.parseInt(input);
 		}catch(Exception e) {
 			System.out.println("숫자만 입력하세요.");
-			e.printStackTrace();
 		}
 		return number;
 	}
 	
 	private String inputString(String message) {
-		System.out.println(message);
+		System.out.println(message + " : ");
 		return scan.next();
 	}
 	
@@ -106,7 +143,7 @@ public class Bank {
 	}
 	
 	private void joinUser() {
-		String name = inputString("이름 : ");
+		String name = inputString("이름");
 		String phone = inputString("phone (###-####-####)");
 		
 		User user = userManager.createUser(name, phone);
@@ -138,7 +175,7 @@ public class Bank {
 		Account account = findAccount();	// 계좌를 찾고
 		
 		if(isValidAccount(account)) {	// 유효하면
-			int money = inputNumber("입금 금액 : ");
+			int money = inputNumber("입금 금액");
 			int balance = account.getBalance();
 			
 			if(money > 0) {
@@ -146,18 +183,19 @@ public class Bank {
 				System.out.println("입금완료");
 			}else
 				System.out.println("입금실패");
-		}else {
-			System.out.println("유효하지않은 계좌입니다.");
-			return;
 		}
+//		else {
+//			System.out.println("유효하지않은 계좌입니다.");
+//			return;
+//		}
 	}
 	
 	private void transfer() {
-		Account myAccount = findAccount("본인 계좌 : ");
-		String password = inputString("비밀번호 : ");
+		Account myAccount = findAccount("본인 계좌");
+		String password = inputString("비밀번호");
 		
-		Account whoAccount = findAccount("상대 계좌 : ");
-		int money = inputNumber("이체 금액 : ");
+		Account whoAccount = findAccount("상대 계좌");
+		int money = inputNumber("이체 금액");
 		
 		Account[] accounts = new Account[] {myAccount,whoAccount};
 		
@@ -183,7 +221,7 @@ public class Bank {
 	
 	private void withdraw() {
 		Account account = findAccount();
-		String password = inputString("계좌 비밀번호 : ");
+		String password = inputString("계좌 비밀번호");
 		
 		if(account.equalsPassword(password)) {
 			accountManager.deleteAccount(account);
@@ -194,7 +232,7 @@ public class Bank {
 	
 	private void searchAccount() {
 		Account account = findAccount();
-		String password = inputString("계좌 비밀번호 : ");
+		String password = inputString("계좌 비밀번호");
 		
 		if(account.equalsPassword(password)) {
 			System.out.println(toStringMoney(account.getBalance()) + "조회완료");
@@ -251,7 +289,7 @@ public class Bank {
 	
 	private void openAccount(User user) {
 		int userCode = user.getCode();
-		String password = inputString("계좌 비밀번호 : ");
+		String password = inputString("계좌 비밀번호");
 		
 		Account account = accountManager.createAccount(userCode, password);
 		if(isValidAccount(account)) {
@@ -263,6 +301,11 @@ public class Bank {
 		for(Account account : accounts)
 			if(account.getAccountNumber() == null)
 				return false;
+		
+		int code = accounts[0].getUserCode();
+		if(accounts[1].getUserCode() == code)
+			return false;
+		
 		return true;
 	}
 	

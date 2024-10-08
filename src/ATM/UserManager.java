@@ -6,11 +6,10 @@ import java.util.Random;
 public class UserManager {
 
 	private ArrayList<User> group;
-	private Random ran;
+	private Random ran = new Random();
 
 	public UserManager() {
-		group = new ArrayList<>();
-		ran = new Random();
+		this.group = new ArrayList<User>();
 	}
 
 	// C : 사용자 생성
@@ -22,6 +21,14 @@ public class UserManager {
 			return user.clone();
 		}
 		return new User();
+	}
+	
+	public ArrayList<User> findUserAll(){
+		ArrayList<User> copy = new ArrayList<>();
+		
+		for(User user : group)
+			copy.add(user.clone());
+		return copy;
 	}
 
 	// R
@@ -54,6 +61,10 @@ public class UserManager {
 		int code = user.getCode();
 		User target = getUserByUserCode(code);
 		return group.remove(target);
+	}
+	
+	public int getUserSize() {
+		return this.group.size();
 	}
 
 	// 전화번호가 유효한지
