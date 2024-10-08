@@ -109,7 +109,7 @@ public class AccountManager {
 	// 계좌 개수제한 확인메서드
 	private boolean isExceedLimit(int userCode) {
 		ArrayList<Account> accounts = findAccountAllByUserCode(userCode);
-		if(accounts.size() < LIMIT)
+		if(accounts.size() <= LIMIT)
 			return false;
 		return true;
 	}
